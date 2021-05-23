@@ -44,7 +44,7 @@ client.on('message', msg => {
         if(msg.author.bot) return;
         for (const emoji of shop.emojis) {
             let value = Object.values(emoji)[1];
-            if(msg.content.includes(value.toString()) && msg.member.roles.cache.get("844944728885690419") == null) {
+            if(msg.content.includes(value.toString())) {
                 if(!profile[msg.member.id].inventory.includes(value)) {
                     msg.delete();
                     msg.reply("You don't have the permission to use this emoji : buy it first.");
