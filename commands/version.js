@@ -1,5 +1,4 @@
-const package = require("./package.json");
-
+const pack = require("../package.json");
 module.exports = {
     name: "version",
     description: "A command that allows you to see the bot's version.",
