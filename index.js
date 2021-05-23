@@ -18,7 +18,7 @@ global.bets = JSON.parse(betFile);
 const betsClosedFile = fs.readFileSync('./data/betsClosed.json');
 global.betState = JSON.parse(betsClosedFile);
 
-const client = new Discord.Client();
+const client = new Discord.Client({partials: ['MESSAGE', 'CHANNEL', 'REACTION']});
 client.commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
@@ -49,6 +49,22 @@ client.on('message', msg => {
                     msg.delete();
                     msg.reply("You don't have the permission to use this emoji : buy it first.");
                 }
+            }
+        }
+    }
+});
+
+client.on('messageReactionAdd', (reaction, user) => {
+    if(user.bot) return;
+    let msg = reaction.message;
+    let userId = user.id;
+    let reactionString = "<:" + reaction.emoji.name + ":" + reaction.emoji.id + ">";
+    for (const emoji of shop.emojis) {
+        let value = Object.values(emoji)[1];
+        if(reactionString == value.toString()) {
+            if(!profile[userId].inventory.includes(value)) {
+                reaction.remove();
+                reaction.message.channel.send("You don't have the permission to use this emoji : buy it first.");
             }
         }
     }
