@@ -1,8 +1,10 @@
 const fs = require('fs');
-
+const {MessageEmbed} = require("discord.js");
 module.exports = {
     name: "bet",
     description: "Allows you to bet basically",
+    usage: "$bet <carNumber> <price>",
+    admin: false,
     execute(m, args) {
         if(args.length == 2) {
             let carNumber = args[0];
@@ -26,6 +28,15 @@ module.exports = {
             }
             return m.reply("You must provide a price to bet (and it has to be more than 0)");
         }
+    },
+    getHelp(m) {
+        let embed = new MessageEmbed()
+            .setTitle("Bet Command")
+            .addField("Description: ", "This command allows you place your bet on the driver you think will win the next race.", false)
+            .addField("Usage: ", "$bet <carNumber> <price>")
+            .setFooter("Anybody can use this command.")
+            .setColor("GREEN");
+        m.reply(embed);
     }
 }
 

@@ -2,7 +2,9 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: "openbets",
-    description: "Allows you to open the bets.",
+    usage: "$openbets",
+    description: "Allows the admins to open the bets.",
+    admin: true,
     execute(m, args) {
         if(!m.member.hasPermission("ADMINISTRATOR")) return m.reply("I don't think you have the facilities for that, big man.");
         if(betState["closed"]) {
@@ -16,5 +18,14 @@ module.exports = {
             return m.guild.channels.cache.find(channel => channel.id === "833637998813511720").send(embed);
         }
         return m.reply("Bets are already opened.");
+    },
+    getHelp(m) {
+        let embed = new MessageEmbed()
+            .setTitle("Open Bets Command")
+            .addField("Description: ", "This command allows you to open the bets.", false)
+            .addField("Usage: ", "$openbets")
+            .setFooter("This command is an admin-only command.")
+            .setColor("RED");
+        m.reply(embed);
     }
 }

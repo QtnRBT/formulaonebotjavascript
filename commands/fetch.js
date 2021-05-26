@@ -1,9 +1,14 @@
 const request = require("request");
+const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     name: "fetch",
-    description: "This command allows you to fetch the Formula One api to get the latest result.",
+    usage: "$fetch",
+    description: "This command allows you to fetch the Formula One api to get the latest result. It acts as a verification for the admins before revealing the winners.",
+    admin: true,
     execute(message, args) {
+
+        if(!message.member.hasPermission("ADMINISTRATOR")) return message.reply("I don't think you have the facilities for that, big man.");
 
         let raceName = "";
         let circuitName = "";
@@ -22,5 +27,14 @@ module.exports = {
         });
         //message.reply(raceName);
         message.reply("Check console.");
+    },
+    getHelp(m) {
+        let embed = new MessageEmbed()
+            .setTitle("Fetch Command")
+            .addField("Description: ", "This command allows you to check for the last race name, by calling the api, to verify if you can reveal.", false)
+            .addField("Usage: ", "$fetch")
+            .setFooter("This command is an admin-only command.")
+            .setColor("RED");
+        m.reply(embed);
     }
 }

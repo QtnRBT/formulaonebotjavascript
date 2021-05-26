@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const fs = require('fs');
 
+global.commands = [];
+
 const {prefix, token} = require('./config.json');
 
 const shopFile = fs.readFileSync("./data/shop.json");
@@ -27,6 +29,7 @@ for(const file of commandFiles) {
     const command = require(`./commands/${file}`);
 
     client.commands.set(command.name, command);
+    global.commands.push([command.usage, command.description, command.name]);
     console.log(command.name)
 }
 
@@ -85,6 +88,7 @@ client.on('ready', () => {
     }
     fs.writeFileSync("./data/profiles.json", JSON.stringify(profile));
     console.log(`Connected as ${client.user.username}`);
+    global.globalClient = client;
 });
 
 client.on('guildMemberAdd', member => {

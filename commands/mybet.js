@@ -1,6 +1,9 @@
+const {MessageEmbed} = require("discord.js");
 module.exports = {
     name: "mybet",
-    description: "Allows you to see your bets",
+    usage: "$mybet",
+    description: "Allows you to see your current bet",
+    admin: false,
     execute(m, args) {
         let userId = m.author.id;
         if(bets[userId] != null) {
@@ -9,5 +12,14 @@ module.exports = {
             return;
         }
         return m.reply("You have not bet yet.");
+    },
+    getHelp(m) {
+        let embed = new MessageEmbed()
+            .setTitle("My Bet Command")
+            .addField("Description: ", "This command allows you to see your latest bet.", false)
+            .addField("Usage: ", "$mybet")
+            .setFooter("Anybody can use this command.")
+            .setColor("GREEN");
+        m.reply(embed);
     }
 }

@@ -1,9 +1,12 @@
 const fs = require('fs');
 const request = require('request');
+const {MessageEmbed} = require("discord.js");
 
 module.exports = {
     name: "reveal",
-    description: "Allows you to reveal the winner and thus end the bets.",
+    usage: "$reveal",
+    description: "Allows the admins to reveal the winner(s) and thus end the bets.",
+    admin: true,
     execute(m, args) {
 
         if(!m.member.hasPermission('ADMINISTRATOR')) return m.reply("I don't think you have the facilities for that, big man.");
@@ -53,5 +56,14 @@ module.exports = {
 
         return m.reply("The bets are not closed. Please close them first.")
 
+    },
+    getHelp(m) {
+        let embed = new MessageEmbed()
+            .setTitle("Reveal Command")
+            .addField("Description: ", "This command allows you to reveal the results and thus see the winners.", false)
+            .addField("Usage: ", "$reveal")
+            .setFooter("This command is an admin-only command.")
+            .setColor("RED");
+        m.reply(embed);
     }
 }

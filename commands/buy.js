@@ -1,6 +1,9 @@
+const {MessageEmbed} = require('discord.js');
 module.exports = {
     name: "buy",
     description: "A command that allows you to buy anything in the shop.",
+    usage: "$buy <numberOfTheItem>",
+    admin: false,
     execute(m, args) {
         if(args.length >= 1) {
             if(Number(args[0]).toString() != "NaN") {
@@ -66,5 +69,14 @@ module.exports = {
                 m.reply("Please enter a valid product id.");
             }
         }
+    },
+    getHelp(m) {
+        let embed = new MessageEmbed()
+            .setTitle("Buy Command")
+            .addField("Description: ", "This command allows you buy any item from the shop.", false)
+            .addField("Usage: ", "$buy <numberOfTheItem>")
+            .setFooter("Anybody can use this command.")
+            .setColor("GREEN");
+        m.reply(embed);
     }
 }

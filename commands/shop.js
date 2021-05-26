@@ -2,7 +2,9 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: "shop",
+    usage: "$shop",
     description: "A command that allows you to see the shop",
+    admin: false,
     execute(msg, args) {
         let emojiText = "";
         let rolesText = "";
@@ -29,5 +31,14 @@ module.exports = {
             .setFooter("You can buy anything using the command $buy <the number of what you want to buy>");
 
         msg.reply(embed);
+    },
+    getHelp(m) {
+        let embed = new MessageEmbed()
+            .setTitle("Shop Command")
+            .addField("Description: ", "This command allows you to see the shop.", false)
+            .addField("Usage: ", "$shop")
+            .setFooter("Anybody can use this command.")
+            .setColor("GREEN");
+        m.reply(embed);
     }
 }

@@ -1,6 +1,10 @@
+const { MessageEmbed } = require("discord.js");
+
 module.exports = {
     name: "addcoins",
     description: "Adds coins to someone's balance",
+    usage: "$addcoins <@someone> <amount>",
+    admin: true,
     execute(m, args) {
         if(!m.member.hasPermission("ADMINISTRATOR")) return m.reply("I don't think you have the facilities for that, big man.");
         if(args.length == 2) {
@@ -17,5 +21,14 @@ module.exports = {
             }
             m.reply("Mention someone !");
         }
+    },
+    getHelp(m) {
+        let embed = new MessageEmbed()
+            .setTitle("Add Coins Command")
+            .addField("Description: ", "This command allows you to add coins to someone's balance.", false)
+            .addField("Usage: ", "$addcoins @someone amount")
+            .setFooter("This command is an admin-only command.")
+            .setColor("RED");
+        m.reply(embed);
     }
 }
