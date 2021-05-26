@@ -20,10 +20,13 @@ global.bets = JSON.parse(betFile);
 const betsClosedFile = fs.readFileSync('./data/betsClosed.json');
 global.betState = JSON.parse(betsClosedFile);
 
-const client = new Discord.Client({partials: ['MESSAGE', 'CHANNEL', 'REACTION']});
-client.commands = new Discord.Collection();
-
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+
+
+
+const client = new Discord.Client({partials: ['MESSAGE', 'CHANNEL', 'REACTION'], presence: {status: 'online', activity: {name: "$help for help", type: "PLAYING"}}});
+
+client.commands = new Discord.Collection();
 
 for(const file of commandFiles) {
     const command = require(`./commands/${file}`);
@@ -142,4 +145,4 @@ global.saveBetsSate = function() {
     fs.writeFileSync("./data/betsClosed.json", JSON.stringify(betState));
 }
 
-client.login(token);
+client.login(token).then();
