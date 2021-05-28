@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.5.3",
+    "express": "^4.17.1",
     "node-geocoder": "^3.27.0",
     "request": "^2.88.2"
   },
