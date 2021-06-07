@@ -39,7 +39,3 @@ module.exports = {
         m.reply(embed);
     }
 }
-
-global.saveBets = function() {
-    fs.writeFileSync('./data/bets.json', JSON.stringify(bets));
-}

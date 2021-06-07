@@ -45,7 +45,19 @@ client.on('message', msg => {
 
         if(!client.commands.has(command)) return;
 
-        try {client.commands.get(command).execute(msg, args);} catch(e) {console.log(e)}
+        try {
+            if(client.commands.get(command).admin && msg.member.hasPermission("ADMINISTRATOR")) {
+                client.commands.get(command).execute(msg, args);
+                return;
+            } else if(!client.commands.get(command).admin) {
+                client.commands.get(command).execute(msg, args);
+                return;
+            }
+            msg.reply("I don't think you have the facilities for that, big man.");
+            return;
+        } catch(e) {
+            console.log(e)
+        }
     } else {
         if(msg.author.bot) return;
         for (const emoji of shop.emojis) {
@@ -57,6 +69,17 @@ client.on('message', msg => {
                 }
             }
         }
+
+
+        console.log(winnerBetting.get(msg.author.id) != null);
+        if(winnerBetting.get(msg.author.id) != null) {
+            let betting = require("./commands/placebet.js");
+            betting.winner(msg);
+        } else if(podiumBetting.get(msg.author.id) != null) {
+            let betting = require("./commands/placebet.js");
+            betting.podium(msg);
+        }
+
     }
 });
 

@@ -22,24 +22,44 @@ module.exports = {
 
                 let resultsArray = body.MRData.RaceTable.Races[0].Results;
 
-                let carNumber = resultsArray[0].number;
-                let firstName = resultsArray[0].Driver.givenName;
-                let lastName = resultsArray[0].Driver.familyName;
+                let first = resultsArray[0].number;
+                let firstFirstName = resultsArray[0].Driver.givenName;
+                let firstLastName = resultsArray[0].Driver.familyName;
 
-                let driverOdd = Number(odd[carNumber]);
+                let second = resultsArray[1].number;
+                let secondFirstName = resultsArray[1].Driver.givenName;
+                let secondLastName = resultsArray[1].Driver.familyName;
 
-                m.reply(firstName + " " + lastName + " (" + carNumber + ") has won the " + res.raceName + " which took place at the " + res.Circuit.circuitName);
+                let third = resultsArray[2].number;
+                let thirdFirstName = resultsArray[2].Driver.givenName;
+                let thirdLastName = resultsArray[2].Driver.familyName;
+
+                let firstOdd = Number(odd[first]);
+                let secondOdd = Number(odd[second]);
+                let thirdOdd = Number(odd[third]);
+
+                m.reply("The podium for the last race was the following : \n- 1rst: N°" + first + " " + firstFirstName + " " + firstLastName + "\n- 2nd: N°" + second + " " + secondFirstName + " " + secondLastName + "\n- 3rd: N°" + third + " " + thirdFirstName + " " + thirdLastName);
                 m.reply("Retrieving bets...");
 
                 for(let [key, value] of Object.entries(bets)) {
-                    if(value[0] == carNumber) {
-                        let price = Number(value[1]);
+                    if(value.length == 2) {
+                        if(value[0] == first) {
+                            let price = Number(value[1]);
+                            let userId = key;
+
+                            let better = m.client.users.cache.find(user => user.id === userId);
+                            let won = Math.ceil(price*firstOdd);
+
+                            m.channel.send(better.toString() + " just won " + won + " <:f1coin:834897400610029568> !");
+                            setBalance(better.id, getBalance(better.id) + won);
+                        }
+                    } else if(value.length == 4) {
+                        let price = Number(value[3]);
                         let userId = key;
 
                         let better = m.client.users.cache.find(user => user.id === userId);
-                        let won = Math.ceil(price*driverOdd);
-
-                        m.channel.send(better.toString() + " just won " + won + " <:f1coin:834897400610029568> by betting on " + firstName + " " + lastName + " !");
+                        let won = Math.ceil((price*odd[value[0]]) + ((price*odd[value[1]])/2) + ((price*odd[value[2]])/3));
+                        m.channel.send(better.toString() + " just won " + won + " <:f1coin:834897400610029568> !");
                         setBalance(better.id, getBalance(better.id) + won);
                     }
                 }
