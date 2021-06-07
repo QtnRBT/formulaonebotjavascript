@@ -121,6 +121,7 @@ module.exports = {
             .addField("Usage: ", "$placebet <winner/podium>")
             .setColor("GREEN")
             .setFooter("Anybody can use this command.");
+        msg.channel.send(embed);
     }
 }
 
