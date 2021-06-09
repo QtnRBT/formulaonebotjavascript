@@ -22,8 +22,6 @@ global.betState = JSON.parse(betsClosedFile);
 
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 
-
-
 const client = new Discord.Client({partials: ['MESSAGE', 'CHANNEL', 'REACTION'], presence: {status: 'online', activity: {name: "$help for help", type: "PLAYING"}}});
 
 client.commands = new Discord.Collection();
@@ -38,25 +36,27 @@ for(const file of commandFiles) {
 
 // commands stuff
 client.on('message', msg => {
+    if(msg.author.bot) return;
     if(msg.content.startsWith(prefix)) {
         let contentArray = msg.content.split(" ");
-        let command = contentArray[0].replace(prefix, "");
+
+        let command = client.commands.get(contentArray[0].replace(prefix, "")) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(contentArray[0].replace(prefix, "")));
         let args = contentArray.slice(1, contentArray.length);
 
-        if(!client.commands.has(command)) return;
+        if(!command) return;
 
         try {
-            if(client.commands.get(command).admin && msg.member.hasPermission("ADMINISTRATOR")) {
-                client.commands.get(command).execute(msg, args);
+            if(command.admin && msg.member.hasPermission("ADMINISTRATOR")) {
+                command.execute(msg, args);
                 return;
-            } else if(!client.commands.get(command).admin) {
-                client.commands.get(command).execute(msg, args);
+            } else if(!command.admin) {
+                command.execute(msg, args);
                 return;
             }
             msg.reply("I don't think you have the facilities for that, big man.");
             return;
         } catch(e) {
-            console.log(e)
+            console.log(e);
         }
     } else {
         if(msg.author.bot) return;
@@ -71,12 +71,11 @@ client.on('message', msg => {
         }
 
 
-        console.log(winnerBetting.get(msg.author.id) != null);
         if(winnerBetting.get(msg.author.id) != null) {
-            let betting = require("./commands/placebet.js");
+            let betting = require("./commands/bet.js");
             betting.winner(msg);
         } else if(podiumBetting.get(msg.author.id) != null) {
-            let betting = require("./commands/placebet.js");
+            let betting = require("./commands/bet.js");
             betting.podium(msg);
         }
 
@@ -99,6 +98,7 @@ client.on('messageReactionAdd', (reaction, user) => {
     }
 });
 
+
 client.on('ready', () => {
     let guild = client.guilds.cache.first();
     for(let member of guild.members.cache) {
@@ -106,9 +106,15 @@ client.on('ready', () => {
         if(!user.bot) {
             let id = user.id;
             if(profile[id] == undefined) {
-                let json = '{"'+ id + '": { "balance": 100, "inventory": [] }}';
+                let json = '{"'+ id + '": { "balance": 100, "inventory": [], "challengesCompleted": [] }}';
                 profile[id] = JSON.parse(json)[id];
                 writeData();
+            } else {
+                if(profile[id].challengesCompleted == undefined) {
+                    let json = '{"'+ id + '": { "balance": ' + getBalance(id) + ', "inventory": [], "challengesCompleted": [] }}';
+                    profile[id] = JSON.parse(json)[id];
+                    writeData();
+                }
             }
         }
     }
@@ -147,6 +153,16 @@ client.on('disconnect', () => {
 
 global.getBalance = function(userId) {
     return profile[userId].balance;
+}
+
+global.setChallengesCompleted = function(userId, challengesCompleted) {
+    profile[userId].challengesCompleted = challengesCompleted;
+    writeData();
+    return;
+}
+
+global.getChallengesCompleted = function (userId) {
+    return profile[userId].challengesCompleted;
 }
 
 global.setBalance = function(userId, balance) {

@@ -1,0 +1,9 @@
+{
+  "monaco-hotlap": {
+    "name": "The Monaco Hotlap challenge",
+    "usage": "$challenge monaco-hotlap",
+    "description": "Achieve a lap time of 1:11.000 at Monaco to win 1000 <:f1coin:834897400610029568>",
+    "reward": 1000,
+    "code": null
+  }
+}

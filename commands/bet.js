@@ -5,10 +5,11 @@ const fs = require("fs");
 const { MessageEmbed } = require("discord.js");
 
 module.exports = {
-    name: "placebet",
+    name: "bet",
+    aliases: ["placebet"],
     admin: false,
     description: "This command allows you to place your bet, either on a winner or on the podium formation.",
-    usage: "$placebet <winner/podium>",
+    usage: "$bet <winner/podium>",
     execute(m, args) {
         if(betState["closed"]) return m.reply("The bets are closed.");
         if (args.length >= 1) {
@@ -118,7 +119,7 @@ module.exports = {
         let embed = new MessageEmbed()
             .setTitle("Place Bet Command")
             .addField("Description: ", "This command allows you to place your bet, either on a winner or on a specific podium. Your gain will be calculated based on the following formula : what you pay x the odd of the driver. If you placed a bet on a podium, the formula will be : (pay x odd of winner) + ((pay x odd of 2nd)/2) + ((pay x odd of 3rd)/3). Since we want to make sure you never have some bizarre balance, we are rounding up this gain (to the next integer because we are nice people).", false)
-            .addField("Usage: ", "$placebet <winner/podium>")
+            .addField("Usage: ", "$bet <winner/podium>")
             .setColor("GREEN")
             .setFooter("Anybody can use this command.");
         msg.channel.send(embed);
