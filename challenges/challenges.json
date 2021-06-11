@@ -5,5 +5,12 @@
     "description": "Achieve a lap time of 1:11.000 at Monaco to win 1000 <:f1coin:834897400610029568>",
     "reward": 1000,
     "code": null
+  },
+  "monaco-hell-race": {
+    "name": "The Monaco Hell race",
+    "usage": "$challenge monaco-hell-race",
+    "description": "Finish the race first, starting from P20 to win 1 000 000 <:f1coin:834897400610029568>. The race settings should be : maximum rain, simulation damage and no assists.",
+    "reward": 1000000,
+    "code": null
   }
 }
