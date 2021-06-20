@@ -57,10 +57,12 @@ module.exports = {
                         let price = Number(value[3]);
                         let userId = key;
 
-                        let better = m.client.users.cache.find(user => user.id === userId);
-                        let won = Math.ceil((price*odd[value[0]]) + ((price*odd[value[1]])/2) + ((price*odd[value[2]])/3));
-                        m.channel.send(better.toString() + " just won " + won + " <:f1coin:834897400610029568> !");
-                        setBalance(better.id, getBalance(better.id) + won);
+                        if (value[0] == first && value[1] == second && value[2] == third) {
+                            let better = m.client.users.cache.find(user => user.id === userId);
+                            let won = Math.ceil((price*firstOdd) + ((price*secondOdd)/2) + ((price*thirdOdd)/3));
+                            m.channel.send(better.toString() + " just won " + won + " <:f1coin:834897400610029568> !");
+                            setBalance(better.id, getBalance(better.id) + won);
+                        }
                     }
                 }
 
